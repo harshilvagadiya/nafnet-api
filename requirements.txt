@@ -1,3 +1,4 @@
+# Original NAFNet dependencies
 addict
 future
 lmdb
@@ -11,3 +12,11 @@ scipy
 tb-nightly
 tqdm
 yapf
+
+# Additional requirements for the API
+fastapi>=0.95.0
+uvicorn>=0.21.0
+python-multipart>=0.0.5
+
+# Clone the original NAFNet repository for full functionality:
+# git clone https://github.com/megvii-research/NAFNet.git
