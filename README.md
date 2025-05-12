@@ -9,26 +9,51 @@ This repository provides a FastAPI-based web API for image restoration using the
 - **CPU Compatible**: Modified to work on systems without NVIDIA GPUs
 - **Easy Deployment**: FastAPI with built-in Swagger docs
 
-## Getting Started
+## Project Structure
 
-### Prerequisites
+This API is designed to work with the original NAFNet model. It provides a user-friendly interface for using NAFNet for image restoration.
 
-- Python 3.8+
-- PyTorch
-- OpenCV
-- FastAPI
+## Setup Options
 
-### Installation
+### Option 1: Setup as standalone API (Recommended)
 
-1. Clone the repository:
+1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/nafnet-api.git
+   git clone https://github.com/harshilvagadiya/nafnet-api.git
    cd nafnet-api
    ```
 
-2. Install the required dependencies:
+2. Download the NAFNet project:
+   ```bash
+   git clone https://github.com/megvii-research/NAFNet.git nafnet-core
+   ```
+
+3. Install dependencies:
    ```bash
    pip install -r requirements.txt
+   ```
+
+4. Download the pre-trained models from [NAFNet Models](https://github.com/megvii-research/NAFNet#results-and-pre-trained-models) and place them in the `experiments/pretrained_models/` directory.
+
+5. Start the API server:
+   ```bash
+   python api.py
+   ```
+
+### Option 2: Setup as part of existing NAFNet installation
+
+If you already have the NAFNet repository cloned:
+
+1. Add the API files to your NAFNet installation:
+   ```bash
+   cd your-nafnet-directory
+   git clone https://github.com/harshilvagadiya/nafnet-api.git api-files
+   cp api-files/api.py .
+   ```
+
+2. Install API dependencies:
+   ```bash
+   pip install fastapi uvicorn python-multipart
    ```
 
 3. Start the API server:
@@ -36,15 +61,15 @@ This repository provides a FastAPI-based web API for image restoration using the
    python api.py
    ```
 
+## API Usage
+
 The server will start on `http://localhost:8000`.
 
-### API Usage
-
-#### Web Interface
+### Web Interface
 
 Open your browser and navigate to `http://localhost:8000` to use the web interface.
 
-#### REST API
+### REST API
 
 - **Process an image**: `POST /process/`
   - Upload an image file to process it
@@ -63,15 +88,11 @@ Example:
 curl http://localhost:8000/health
 ```
 
-### API Documentation
+## API Documentation
 
 FastAPI automatically generates documentation for the API. Once the server is running, you can access:
 - Swagger UI: `http://localhost:8000/docs`
 - ReDoc: `http://localhost:8000/redoc`
-
-## Architecture
-
-This API integrates the NAFNet model for image restoration and provides both a web interface and REST API for easy access. The system has been modified to work on CPU, making it compatible with systems that don't have NVIDIA GPUs.
 
 ## Image Processing
 
@@ -79,6 +100,10 @@ The NAFNet model is used for high-quality image restoration and enhancement. It 
 - Reduce noise in images
 - Improve image clarity
 - Enhance image quality
+
+## CPU Support
+
+This API has been modified to work on CPU, making it compatible with systems that don't have NVIDIA GPUs.
 
 ## License
 
