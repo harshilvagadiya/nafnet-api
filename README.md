@@ -78,7 +78,7 @@ Due to file size limitations, the pretrained model needs to be downloaded separa
 mkdir -p src/lib/experiments/pretrained_models
 ```
 
-2. Download the NAFNet-REDS-width64.pth model from [Hugging Face](https://huggingface.co/megvii-research/NAFNet) or other model hosting platforms.
+2. Download the NAFNet-REDS-width64.pth model from [Link](https://drive.google.com/uc?id=14D4V4raNYIOhETfcuuLI3bGLB-OYIv6X) or other model hosting platforms.
 
 3. Place the downloaded model file in:
 ```
