@@ -69,6 +69,24 @@ When you're done working with NAFNet, you can deactivate the virtual environment
 deactivate
 ```
 
+## Downloading Pretrained Model
+
+Due to file size limitations, the pretrained model needs to be downloaded separately. After setting up your environment:
+
+1. Create the directory for the model:
+```bash
+mkdir -p src/lib/experiments/pretrained_models
+```
+
+2. Download the NAFNet-REDS-width64.pth model from [Hugging Face](https://huggingface.co/megvii-research/NAFNet) or other model hosting platforms.
+
+3. Place the downloaded model file in:
+```
+src/lib/experiments/pretrained_models/NAFNet-REDS-width64.pth
+```
+
+This step is required before running the API server.
+
 ## How to Run the API Server
 
 To run the NAFNet API server, you need to set the Python path to include the source libraries and then start the API:
