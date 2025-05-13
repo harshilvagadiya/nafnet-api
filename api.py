@@ -15,8 +15,8 @@ from PIL import Image
 
 # NAFNet imports
 from basicsr.models import create_model
-from basicsr.utils import img2tensor as _img2tensor, tensor2img
-from basicsr.utils.options import parse
+from src.lib.basicsr.utils import img2tensor as _img2tensor, tensor2img
+from src.lib.basicsr.utils.options import parse
 
 # Configure logging
 logging.basicConfig(
@@ -53,7 +53,7 @@ def load_model():
         logger.info("Loading NAFNet model...")
         try:
             # Use the same configuration as in run_inference.py
-            opt_path = 'options/test/REDS/NAFNet-width64.yml'
+            opt_path = 'src/lib/options/test/REDS/NAFNet-width64.yml'
             opt = parse(opt_path, is_train=False)
             opt['dist'] = False
             # Force CPU mode

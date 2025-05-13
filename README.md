@@ -1,116 +1,178 @@
-# NAFNet Image Restoration API
+# NAFNet API Service
 
-This repository provides a FastAPI-based web API for image restoration using the [NAFNet](https://github.com/megvii-research/NAFNet) model.
+## Project Description
 
-## Features
+This project provides a web-based API service for image restoration using NAFNet (Nonlinear Activation Free Network), a state-of-the-art image restoration model. The service can restore degraded images affected by blur, noise, or low resolution. NAFNet is designed to be efficient while maintaining high-quality restoration results.
 
-- **Web Interface**: Simple HTML interface for uploading and processing images
-- **REST API**: Endpoints for programmatic image processing
-- **CPU Compatible**: Modified to work on systems without NVIDIA GPUs
-- **Easy Deployment**: FastAPI with built-in Swagger docs
+NAFNet is based on the paper [NAFNet: Nonlinear Activation Free Network for Image Restoration](https://arxiv.org/abs/2204.04676).
 
-## Project Structure
+## Requirements
 
-This API is designed to work with the original NAFNet model. It provides a user-friendly interface for using NAFNet for image restoration.
+- Python 3.8+
+- PyTorch 1.8+
+- FastAPI
+- UV (optional, for faster dependency management)
+- Other dependencies listed in `requirements.txt`
 
-## Setup Options
+## Installation Instructions
 
-### Option 1: Setup as standalone API (Recommended)
+### Setup with UV (Recommended)
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/harshilvagadiya/nafnet-api.git
-   cd nafnet-api
-   ```
+UV is a fast Python package installer and virtual environment manager. It offers significantly faster dependency resolution and installation compared to pip.
 
-2. Download the NAFNet project:
-   ```bash
-   git clone https://github.com/megvii-research/NAFNet.git nafnet-core
-   ```
+#### 1. Install UV
 
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+First, you need to install UV:
 
-4. Download the pre-trained models from [NAFNet Models](https://github.com/megvii-research/NAFNet#results-and-pre-trained-models) and place them in the `experiments/pretrained_models/` directory.
-
-5. Start the API server:
-   ```bash
-   python api.py
-   ```
-
-### Option 2: Setup as part of existing NAFNet installation
-
-If you already have the NAFNet repository cloned:
-
-1. Add the API files to your NAFNet installation:
-   ```bash
-   cd your-nafnet-directory
-   git clone https://github.com/harshilvagadiya/nafnet-api.git api-files
-   cp api-files/api.py .
-   ```
-
-2. Install API dependencies:
-   ```bash
-   pip install fastapi uvicorn python-multipart
-   ```
-
-3. Start the API server:
-   ```bash
-   python api.py
-   ```
-
-## API Usage
-
-The server will start on `http://localhost:8000`.
-
-### Web Interface
-
-Open your browser and navigate to `http://localhost:8000` to use the web interface.
-
-### REST API
-
-- **Process an image**: `POST /process/`
-  - Upload an image file to process it
-  - Returns the processed image
-
-Example using cURL:
 ```bash
-curl -X POST "http://localhost:8000/process/" -F "file=@your_image.jpg" --output processed.png
+# For Linux/macOS
+curl -sSf https://install.determinate.systems/uv | sh -s -- -y
+
+# For Windows (using PowerShell)
+irm https://install.determinate.systems/uv | iex
 ```
 
-- **Health check**: `GET /health`
-  - Check if the API and model are running properly
+#### 2. Clone the repository
 
-Example:
 ```bash
-curl http://localhost:8000/health
+git clone https://github.com/harshilvagadiya/nafnet-api.git
+cd NAFNet
 ```
 
-## API Documentation
+#### 3. Create a virtual environment with UV
 
-FastAPI automatically generates documentation for the API. Once the server is running, you can access:
-- Swagger UI: `http://localhost:8000/docs`
-- ReDoc: `http://localhost:8000/redoc`
+```bash
+# Create a new virtual environment in a folder named 'venv'
+uv venv
+```
 
-## Image Processing
+#### 4. Activate the virtual environment
 
-The NAFNet model is used for high-quality image restoration and enhancement. It can:
-- Reduce noise in images
-- Improve image clarity
-- Enhance image quality
+```bash
+# On Linux/macOS
+source venv/bin/activate
 
-## CPU Support
+# On Windows
+.\venv\Scripts\activate
+```
 
-This API has been modified to work on CPU, making it compatible with systems that don't have NVIDIA GPUs.
+#### 5. Install dependencies with UV
+
+```bash
+# Install all requirements using UV (much faster than pip)
+uv pip install -r requirements.txt
+```
+
+When you're done working with NAFNet, you can deactivate the virtual environment:
+
+```bash
+deactivate
+```
+
+## How to Run the API Server
+
+To run the NAFNet API server, you need to set the Python path to include the source libraries and then start the API:
+
+```bash
+# Run from the project root directory
+PYTHONPATH=$PYTHONPATH:src/lib python api.py
+```
+
+On Windows:
+
+```bash
+set PYTHONPATH=%PYTHONPATH%;src\lib
+python api.py
+```
+
+The server will start on `http://0.0.0.0:8000` by default. You can access the web interface by navigating to this URL in your browser.
+
+## API Endpoints Documentation
+
+The API provides the following endpoints:
+
+### 1. Web Interface
+
+- **URL:** `/`
+- **Method:** `GET`
+- **Description:** Provides a user-friendly web interface for uploading and processing images.
+
+### 2. Process Image
+
+- **URL:** `/process/`
+- **Method:** `POST`
+- **Request:**
+  - Content-Type: `multipart/form-data`
+  - Body: Form data with a file field named `file` containing the image to process
+- **Response:**
+  - Content-Type: `image/png`
+  - Body: The processed image
+- **Description:** Uploads an image for processing with NAFNet and returns the restored image.
+
+### 3. Health Check
+
+- **URL:** `/health`
+- **Method:** `GET`
+- **Response:**
+  - Content-Type: `application/json`
+  - Body: `{"status": "ok", "model_loaded": true}` if the service is healthy
+- **Description:** Checks if the service is running and the model is loaded correctly.
+
+## Examples of Usage
+
+### Using the Web Interface
+
+1. Open your browser and navigate to `http://localhost:8000`
+2. Click the "Choose File" button and select an image to restore
+3. Click "Process Image" to start the restoration
+4. The original and restored images will be displayed side by side
+5. You can download the restored image using the "Download" link
+
+
+## Troubleshooting Common Issues
+
+### ModuleNotFoundError: No module named 'basicsr'
+
+**Solution:** Make sure you're running the API with the correct PYTHONPATH:
+
+```bash
+PYTHONPATH=$PYTHONPATH:src/lib python api.py
+```
+
+### CUDA out of memory error
+
+**Solution:** The model is trying to use too much GPU memory. You can:
+
+1. Use a smaller image size
+2. Edit `api.py` to use CPU mode (already set by default)
+3. If you need GPU mode, reduce batch size or model parameters
+
+### Import errors with torch or other dependencies
+
+**Solution:** Make sure all dependencies are installed correctly:
+
+```bash
+pip install -r requirements.txt
+```
+
+### Connection refused when accessing the web interface
+
+**Solution:** Check that the API server is running and listening on the correct port:
+
+1. Make sure there's no error in the terminal where you started the server
+2. Check if the port 8000 is already in use by another application
+3. Try accessing http://127.0.0.1:8000 instead of http://localhost:8000
+
+### Slow processing speed
+
+**Solution:**
+1. Processing on CPU is slower than GPU. If available, configure the model to use GPU by modifying line 60 in `api.py`:
+   ```python
+   opt['num_gpu'] = 1  # Set to number of GPUs available
+   ```
+2. If using GPU and still slow, try optimizing the model parameters or use a more powerful GPU.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- [NAFNet](https://github.com/megvii-research/NAFNet) - The original image restoration model
-- [FastAPI](https://fastapi.tiangolo.com/) - For the web framework
+This project is licensed under the terms of the Apache License 2.0.
 
